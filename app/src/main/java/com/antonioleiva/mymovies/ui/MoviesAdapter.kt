@@ -15,10 +15,10 @@ class MoviesAdapter(private val listener: (Movie) -> Unit) :
     var movies: List<Movie> by Delegates.observable(emptyList()) { _, old, new ->
         DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                old[oldItemPosition] == new[newItemPosition]
+                old[oldItemPosition].id == new[newItemPosition].id
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                old[oldItemPosition].id == new[newItemPosition].id
+                old[oldItemPosition] == new[newItemPosition]
 
             override fun getOldListSize(): Int = old.size
 
