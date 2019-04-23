@@ -3,32 +3,34 @@ package com.antonioleiva.mymovies.ui.detail
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.antonioleiva.mymovies.R
-import com.antonioleiva.mymovies.model.Movie
 import com.antonioleiva.mymovies.ui.common.loadUrl
 import kotlinx.android.synthetic.main.activity_detail.*
 
-class DetailActivity : AppCompatActivity(), DetailPresenter.View {
+class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val MOVIE = "DetailActivity:movie"
     }
 
-    private val presenter = DetailPresenter()
+    private lateinit var viewModel: DetailViewModel
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-        presenter.onCreate(this, intent.getParcelableExtra(MOVIE))
+
+        viewModel = ViewModelProviders.of(
+            this,
+            DetailViewModelFactory(intent.getParcelableExtra(MOVIE))
+        )[DetailViewModel::class.java]
+
+        viewModel.model.observe(this, Observer(::updateUi))
     }
 
-    override fun onDestroy() {
-        presenter.onDestroy()
-        super.onDestroy()
-    }
-
-    override fun updateUI(movie: Movie) = with(movie) {
+    private fun updateUi(model: DetailViewModel.UiModel) = with(model.movie) {
         movieDetailToolbar.title = title
         movieDetailImage.loadUrl("https://image.tmdb.org/t/p/w780$backdropPath")
         movieDetailSummary.text = overview
