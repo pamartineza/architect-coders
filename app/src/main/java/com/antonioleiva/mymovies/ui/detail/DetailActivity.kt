@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.antonioleiva.mymovies.R
+import com.antonioleiva.mymovies.ui.common.getViewModel
 import com.antonioleiva.mymovies.ui.common.loadUrl
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -22,10 +22,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        viewModel = ViewModelProviders.of(
-            this,
-            DetailViewModelFactory(intent.getParcelableExtra(MOVIE))
-        )[DetailViewModel::class.java]
+        viewModel = getViewModel { DetailViewModel(intent.getParcelableExtra(MOVIE)) }
 
         viewModel.model.observe(this, Observer(::updateUi))
     }
