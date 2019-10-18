@@ -9,8 +9,8 @@ android {
         applicationId "com.antonioleiva.mymovies"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode getCustomVersionCode(referenceVersionCode)
+        versionName getCustomVersionName(referenceVersionName)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -22,6 +22,17 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    applicationVariants.all { variant ->
+
+        def outputName = "app-${variant.buildType.name}_architect_coders_VC${defaultConfig.versionCode}_${defaultConfig.versionName}_.apk"
+
+        variant.outputs.all { output ->
+            outputFileName = outputName
+        }
+
     }
 }
 
